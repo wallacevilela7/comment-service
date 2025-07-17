@@ -11,6 +11,7 @@ import tech.wvs.commentsms.api.pagination.PaginationResponse;
 import tech.wvs.commentsms.domain.entity.Comment;
 import tech.wvs.commentsms.service.CommentService;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,12 +31,14 @@ public class CommentController {
 
         var comment = service.create(dto);
 
-        return null;
+        return comment.getId() != null
+                ? ResponseEntity.created(URI.create("/api/comments/" + comment.getId())).build()
+                : ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
     }
 
     @GetMapping()
     private ResponseEntity<ApiResponse<CommentOutput>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                @RequestParam(value= "pageSize", defaultValue = "5") Integer pageSize) {
+                                                               @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize) {
         var content = service.findAll(page, pageSize);
 
         return ResponseEntity.ok(
