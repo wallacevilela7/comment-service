@@ -1,0 +1,10 @@
+services:
+  posrgres:
+    container_name: 'comments-service-postgres'
+    image: postgres:latest
+    environment:
+      - 'POSTGRES_DB=comments-db'
+      - 'POSTGRES_USER=myuser'
+      - 'POSTGRES_PASSWORD=secret'
+    ports:
+      - '5432:5432'
